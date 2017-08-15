@@ -85,24 +85,24 @@ cameraL.release()
 cameraR.release()
 print "Starting Calibration\n"
 
-cameraMatrix1 = cv2.cv.CreateMat(3, 3, cv2.CV_64FC1)
-cameraMatrix2 = cv2.cv.CreateMat(3, 3, cv2.CV_64FC1)
+#cameraMatrix1 = cv2.cv.CreateMat(3, 3, cv2.CV_64FC1)
+#cameraMatrix2 = cv2.cv.CreateMat(3, 3, cv2.CV_64FC1)
 
-#cameraMatrix1 = np.array(
-#                         [[610.07804118, 0, 314.48633303],
-#                         [0, 609.62733791, 265.13152021],
-#                         [0, 0, 1]], dtype = "double"
-#                         )
+cameraMatrix1 = np.array(
+                         [[610.07804118, 0, 314.48633303],
+                         [0, 609.62733791, 265.13152021],
+                         [0, 0, 1]], dtype = "double"
+                         )
 
-#distCoeffs1 = np.array([-0.14480132, 0.28330372, 0.00185214, -0.00103649, -0.33967936]) # lens distortion
+distCoeffs1 = np.array([-0.14480132, 0.28330372, 0.00185214, -0.00103649, -0.33967936]) # lens distortion
 
-#cameraMatrix2 = np.array(
-#                         [[602.3300926, 0, 314.00816007],
-#                         [0, 601.89164578, 265.7839791],
-#                         [0, 0, 1]], dtype = "double"
-#                         )
+cameraMatrix2 = np.array(
+                          [[602.3300926, 0, 314.00816007],
+                         [0, 601.89164578, 265.7839791],
+                         [0, 0, 1]], dtype = "double"
+                         )
  
-#distCoeffs2 = np.array([-0.13277752, 0.24566243, 0.00257889, -0.00288082, -0.35018818]) # lens distortion
+distCoeffs2 = np.array([-0.13277752, 0.24566243, 0.00257889, -0.00288082, -0.35018818]) # lens distortion
 
 
 retval, cameraMatrix1, distCoeffs1, cameraMatrix2, distCoeffs2, R, T, E, F = cv2.stereoCalibrate(object_points, imagePoints1, imagePoints2, (width, height),
