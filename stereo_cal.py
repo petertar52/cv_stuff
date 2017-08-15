@@ -66,11 +66,10 @@ while (success < numBoards):
    cv2.imshow('image1', gray1)
    cv2.imshow('image2', gray2)
 
-   k = cv2.waitKey(100)
-   print k
+   k = cv2.waitKey(10000)
    if (k == 27): #ESC key
        break
-   if (found1 != 0 and found2 != 0):
+   if (k == 32 and found1 != 0 and found2 != 0):
 
        imagePoints1.append(corners1);
        imagePoints2.append(corners2);
@@ -85,25 +84,30 @@ cv2.destroyAllWindows()
 cameraL.release()
 cameraR.release()
 print "Starting Calibration\n"
-cameraMatrix1 = np.array(
-                         [[610.07804118, 0, 314.48633303],
-                         [0, 609.62733791, 265.13152021],
-                         [0, 0, 1]], dtype = "double"
-                         )
+
+cameraMatrix1 = cv2.cv.CreateMat(3, 3, cv2.CV_64FC1)
+cameraMatrix2 = cv2.cv.CreateMat(3, 3, cv2.CV_64FC1)
+
+#cameraMatrix1 = np.array(
+#                         [[610.07804118, 0, 314.48633303],
+#                         [0, 609.62733791, 265.13152021],
+#                         [0, 0, 1]], dtype = "double"
+#                         )
+
+#distCoeffs1 = np.array([-0.14480132, 0.28330372, 0.00185214, -0.00103649, -0.33967936]) # lens distortion
+
+#cameraMatrix2 = np.array(
+#                         [[602.3300926, 0, 314.00816007],
+#                         [0, 601.89164578, 265.7839791],
+#                         [0, 0, 1]], dtype = "double"
+#                         )
  
-distCoeffs1 = np.array([-0.14480132, 0.28330372, 0.00185214, -0.00103649, -0.33967936]) # lens distortion
-cameraMatrix2 = np.array(
-                         [[602.3300926, 0, 314.00816007],
-                         [0, 601.89164578, 265.7839791],
-                         [0, 0, 1]], dtype = "double"
-                         )
- 
-distCoeffs2 = np.array([-0.13277752, 0.24566243, 0.00257889, -0.00288082, -0.35018818]) # lens distortion
+#distCoeffs2 = np.array([-0.13277752, 0.24566243, 0.00257889, -0.00288082, -0.35018818]) # lens distortion
 
 
 retval, cameraMatrix1, distCoeffs1, cameraMatrix2, distCoeffs2, R, T, E, F = cv2.stereoCalibrate(object_points, imagePoints1, imagePoints2, (width, height),
                                                                                                  cameraMatrix1, distCoeffs1, cameraMatrix2, distCoeffs2,
-                                                                                                 flags=cv2.CALIB_FIX_INTRINSIC + cv2.CALIB_USE_INTRINSIC_GUESS,
+                                                                                                 flags=cv2.CALIB_FIX_INTRINSIC + cv2.CALIB_USE_INTRINSIC_GUESS+cv2.CALIB_SAME_FOCAL_LENGTH,
                                                                                                  criteria = criteria)
 ## , cv2.cvTermCriteria(cv2.CV_TERMCRIT_ITER+cv2.CV_TERMCRIT_EPS, 100, 1e-5),   cv2.CV_CALIB_SAME_FOCAL_LENGTH | cv2.CV_CALIB_ZERO_TANGENT_DIST)
 #cv2.cv.StereoCalibrate(object_points, imagePoints1, imagePoints2, pointCounts, cv.fromarray(K1), cv.fromarray(distcoeffs1), cv.fromarray(K2), cv.fromarray(distcoeffs2), imageSize, cv.fromarray(R), cv.fromarray(T), cv.fromarray(E), cv.fromarray(F), flags = cv.CV_CALIB_FIX_INTRINSIC)
@@ -117,19 +121,27 @@ retval, cameraMatrix1, distCoeffs1, cameraMatrix2, distCoeffs2, R, T, E, F = cv2
 #fs1 << "E" << E;
 #fs1 << "F" << F;
 print "Done Calibration\n"
-print cameraMatrix1,"\n"
-print R,"\n"
-print T,"\n"
+print "matrix1\n",cameraMatrix1,"\n"
 print distCoeffs1,"\n"
+print "matrix2\n",cameraMatrix2,"\n"
+print distCoeffs2,"\n"
+print "R\n",R,"\n"
+print "T\n",T,"\n"
 print "Starting Rectification\n"
 R1 = np.zeros(shape=(3,3))
 R2 = np.zeros(shape=(3,3))
 P1 = np.zeros(shape=(3,3))
 P2 = np.zeros(shape=(3,3))
 
+print object_points
+
 #(roi1, roi2) = cv2.cv.StereoRectify(cameraMatrix1, distCoeffs1, cameraMatrix2, distCoeffs2,(width, height), R, T, R1, R2, P1, P2, Q=None, flags=cv2.cv.CV_CALIB_ZERO_DISPARITY, alpha=-1, newImageSize=(0, 0))
 cv2.stereoRectify(cameraMatrix1, distCoeffs1, cameraMatrix2, distCoeffs2,(width, height), R, T, R1, R2, P1, P2, Q=None, flags=cv2.CALIB_ZERO_DISPARITY, alpha=-1, newImageSize=(0,0))
 #stereoRectify(cameraMatrix1, distCoeffs1, cameraMatrix2, distCoeffs2,(width, height), R, T)
+print "R1\n",R1,"\n"
+print "P1\n",P1,"\n"
+print "R2\n",R2,"\n"
+print "P2\n",P2,"\n"
 
 #fs1 << "R1" << R1;
 #fs1 << "R2" << R2;
