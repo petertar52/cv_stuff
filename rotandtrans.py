@@ -2,6 +2,8 @@
 import cv2
 import numpy as np
  
+#try to map object points to image points based on physical measurements and pixel location in the frame
+ 
 # Read Image
 im = cv2.imread("c:/users/peter/desktop/ht_validation/aug3captures/rightCamtake1frame233.jpg");
 size = im.shape
